@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday Bella!</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Audiowide', 'Courier New', monospace;
+            background: #000000;
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            cursor: none;
+        }
+
+        .sparkle-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            opacity: 0;
+            animation: sparkle-twinkle 2s infinite;
+        }
+
+        .sparkle.large {
+            width: 6px;
+            height: 6px;
+            background: radial-gradient(circle, rgba(255, 215, 0, 0.9) 0%, rgba(255, 215, 0, 0) 70%);
+        }
+
+        .sparkle.blue {
+            background: radial-gradient(circle, rgba(173, 216, 230, 0.8) 0%, rgba(173, 216, 230, 0) 70%);
+        }
+
+        .sparkle.pink {
+            background: radial-gradient(circle, rgba(255, 192, 203, 0.8) 0%, rgba(255, 192, 203, 0) 70%);
+        }
+
+        .cursor-glow {
+            position: fixed;
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, rgba(255, 255, 255, 0) 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 10;
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .container {
+            text-align: center;
+            z-index: 2;
+            position: relative;
+            padding: 1rem;
+            max-width: 1200px;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .link-boxes-top {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .titles-section {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .link-boxes-bottom {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .link-box {
+            width: 250px;
+            height: 160px;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            background: #111;
+        }
+
+        .link-box.main-focus {
+            width: 320px;
+            height: 200px;
+            transform: scale(1.05);
+            border: 3px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .link-box:hover {
+            transform: translateY(-10px) scale(1.05);
+            border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5), 0 0 30px rgba(255, 255, 255, 0.1);
+        }
+
+        .link-box.main-focus:hover {
+            transform: translateY(-10px) scale(1.15);
+        }
+
+        .link-box-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: transform 0.4s ease;
+        }
+
+        .link-box:hover .link-box-bg {
+            transform: scale(1.1);
+        }
+
+        .link-box-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.7) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.4s ease;
+        }
+
+        .link-box:hover .link-box-overlay {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.2) 0%, rgba(0, 0, 0, 0.5) 100%);
+        }
+
+        .link-box-content {
+            text-align: center;
+            color: white;
+            z-index: 3;
+        }
+
+        .link-box-title {
+            font-size: 1.2rem;
+            font-weight: 400;
+            letter-spacing: 0.1em;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .link-box-button {
+            background: rgba(255, 255, 255, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-family: 'Audiowide', monospace;
+            font-size: 0.9rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .link-box-button:hover {
+            background: rgba(255, 255, 255, 0.3);
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 255, 255, 0.2);
+        }
+
+        .main-title {
+            font-size: clamp(2.5rem, 6vw, 5rem);
+            font-weight: 400;
+            letter-spacing: 0.2em;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #ffffff 0%, #e0e0e0 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: fade-in-up 1s ease-out;
+            text-transform: uppercase;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.2));
+        }
+
+        .sub-title {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            color: rgba(255, 255, 255, 0.85);
+            animation: fade-in-up 1s ease-out 0.3s both;
+            text-transform: uppercase;
+            filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.1));
+        }
+
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: #f0f;
+            animation: confetti-fall 3s linear forwards;
+            pointer-events: none;
+            z-index: 100;
+        }
+
+        .confetti.red { background: #ff6b6b; }
+        .confetti.blue { background: #4ecdc4; }
+        .confetti.yellow { background: #ffe66d; }
+        .confetti.green { background: #95e1d3; }
+        .confetti.pink { background: #ff9ff3; }
+        .confetti.purple { background: #c44569; }
+
+        @keyframes confetti-fall {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        @keyframes sparkle-twinkle {
+            0%, 100% { 
+                opacity: 0; 
+                transform: scale(0.5) rotate(0deg);
+            }
+            50% { 
+                opacity: 1; 
+                transform: scale(1) rotate(180deg);
+            }
+        }
+
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+            
+            .main-title {
+                margin-bottom: 1.5rem;
+            }
+
+            body {
+                cursor: default;
+            }
+
+            .cursor-glow {
+                display: none;
+            }
+        }
+
+        /* Enhanced glow effect on hover */
+        .main-title:hover {
+            text-shadow: 0 0 30px rgba(255, 255, 255, 0.4);
+            transition: text-shadow 0.3s ease;
+        }
+
+        .sub-title:hover {
+            color: rgba(255, 255, 255, 1);
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.2);
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="sparkle-container" id="sparkleContainer"></div>
+    <div class="cursor-glow" id="cursorGlow"></div>
+    
+    <div class="container">
+        <!-- TOP BOXES (Updated with 3 boxes) -->
+        <div class="link-boxes-top">
+            <div class="link-box" onclick="handleTopBox()">
+                <div class="link-box-bg" style="background-image: url('DSC_7871.jpg');"></div>
+                <div class="link-box-overlay">
+                    <div class="link-box-content">
+                        <div class="link-box-title">Marcia & David</div>
+                        <button class="link-box-button">Click Here</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="link-box" onclick="handleExtraPics()">
+                <div class="link-box-bg" style="background-image: url('DSC_8262.jpg');"></div>
+                <div class="link-box-overlay">
+                    <div class="link-box-content">
+                        <div class="link-box-title">Extra Pics</div>
+                        <button class="link-box-button">Click Here</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="link-box" onclick="handleVideos()">
+                <div class="link-box-bg" style="background-image: url('DSC_7871.jpg');"></div>
+                <div class="link-box-overlay">
+                    <div class="link-box-content">
+                        <div class="link-box-title">Videos</div>
+                        <button class="link-box-button">Click Here</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CENTERED TITLES -->
+        <div class="titles-section">
+            <h1 class="main-title">Happy Birthday Bella!</h1>
+            <h2 class="sub-title">Congratulations Marcia & David</h2>
+        </div>
+
+        <!-- BOTTOM BOX (Updated) -->
+        <div class="link-boxes-bottom">
+            <div class="link-box main-focus" onclick="handleBottomBox()">
+                <div class="link-box-bg" style="background-image: url('DSC_8262.jpg');"></div>
+                <div class="link-box-overlay">
+                    <div class="link-box-content">
+                        <div class="link-box-title">Bella's Pictures</div>
+                        <button class="link-box-button">Click Here</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sparkleContainer = document.getElementById('sparkleContainer');
+        const cursorGlow = document.getElementById('cursorGlow');
+        let mouseX = 0;
+        let mouseY = 0;
+        
+        // Mouse tracking
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+            
+            // Update cursor glow position
+            cursorGlow.style.left = mouseX + 'px';
+            cursorGlow.style.top = mouseY + 'px';
+            cursorGlow.style.opacity = '1';
+            
+            // Create sparkles around mouse
+            if (Math.random() < 0.3) {
+                createSparkle(mouseX, mouseY);
+            }
+        });
+
+        document.addEventListener('mouseleave', () => {
+            cursorGlow.style.opacity = '0';
+        });
+
+        function createSparkle(x, y) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            
+            // Random sparkle types
+            const rand = Math.random();
+            if (rand < 0.2) sparkle.classList.add('large');
+            else if (rand < 0.4) sparkle.classList.add('blue');
+            else if (rand < 0.6) sparkle.classList.add('pink');
+            
+            // Random position around mouse
+            const offsetX = (Math.random() - 0.5) * 80;
+            const offsetY = (Math.random() - 0.5) * 80;
+            
+            sparkle.style.left = (x + offsetX) + 'px';
+            sparkle.style.top = (y + offsetY) + 'px';
+            
+            // Random animation delay
+            sparkle.style.animationDelay = Math.random() * 1 + 's';
+            sparkle.style.animationDuration = (Math.random() * 2 + 1) + 's';
+            
+            sparkleContainer.appendChild(sparkle);
+            
+            // Remove sparkle after animation
+            setTimeout(() => {
+                if (sparkleContainer.contains(sparkle)) {
+                    sparkleContainer.removeChild(sparkle);
+                }
+            }, 3000);
+        }
+
+        function handleExtraPics() {
+            // Create confetti burst
+            createConfettiBurst();
+            
+            // Open Shutterfly link after short delay
+            setTimeout(() => {
+                window.open('https://link.shutterfly.com/DWDQgRTWbVb', '_blank');
+            }, 500);
+        }
+
+        function handleVideos() {
+            // Create confetti burst
+            createConfettiBurst();
+            
+            // Open Google Drive link after short delay
+            setTimeout(() => {
+                window.open('https://drive.google.com/drive/folders/1TDmf-b39JDMXcNqQM4khoepINE5FK71W?usp=sharing', '_blank');
+            }, 500);
+        }
+
+        function handleTopBox() {
+            // Create confetti burst
+            createConfettiBurst();
+            
+            // Open Shutterfly link after short delay
+            setTimeout(() => {
+                window.open('https://link.shutterfly.com/xT6kScvNbVb', '_blank');
+            }, 500);
+        }
+
+        function handleBottomBox() {
+            // Create confetti burst
+            createConfettiBurst();
+            
+            // Open Shutterfly link after short delay
+            setTimeout(() => {
+                window.open('https://link.shutterfly.com/QHw0iTFKbVb', '_blank');
+            }, 500);
+        }
+
+        function createConfettiBurst() {
+            const colors = ['red', 'blue', 'yellow', 'green', 'pink', 'purple'];
+            const confettiCount = 50;
+            
+            for (let i = 0; i < confettiCount; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = `confetti ${colors[Math.floor(Math.random() * colors.length)]}`;
+                    
+                    // Position confetti around the button area
+                    const x = window.innerWidth / 2 + (Math.random() - 0.5) * 300;
+                    const y = window.innerHeight / 2 + 100 + (Math.random() - 0.5) * 100;
+                    
+                    confetti.style.left = x + 'px';
+                    confetti.style.top = y + 'px';
+                    confetti.style.animationDelay = Math.random() * 0.5 + 's';
+                    confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+                    
+                    document.body.appendChild(confetti);
+                    
+                    // Remove confetti after animation
+                    setTimeout(() => {
+                        if (document.body.contains(confetti)) {
+                            document.body.removeChild(confetti);
+                        }
+                    }, 4000);
+                }, i * 20); // Stagger the confetti creation
+            }
+        }
+
+        // Create some ambient sparkles
+        function createAmbientSparkles() {
+            const numSparkles = 8; // Increased from 3 to 8
+            for (let i = 0; i < numSparkles; i++) {
+                setTimeout(() => {
+                    const x = Math.random() * window.innerWidth;
+                    const y = Math.random() * window.innerHeight;
+                    createSparkle(x, y);
+                }, Math.random() * 2000);
+            }
+        }
+
+        // Create ambient sparkles more frequently
+        setInterval(createAmbientSparkles, 2000); // Changed from 3000 to 2000ms
+        
+        // Initial ambient sparkles
+        setTimeout(createAmbientSparkles, 500);
+
+        // Add continuous background sparkles
+        function createContinuousSparkles() {
+            if (Math.random() < 0.7) { // 70% chance to create a sparkle
+                const x = Math.random() * window.innerWidth;
+                const y = Math.random() * window.innerHeight;
+                createSparkle(x, y);
+            }
+        }
+
+        // Create sparkles every 800ms for continuous background effect
+        setInterval(createContinuousSparkles, 800);
+    </script>
+</body>
+</html>
