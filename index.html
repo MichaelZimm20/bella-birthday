@@ -27,6 +27,15 @@
             cursor: none;
         }
 
+        @media (max-width: 768px) {
+            body {
+                overflow-y: scroll !important;
+                overflow-x: hidden;
+                height: auto !important;
+                min-height: 100vh;
+            }
+        }
+
         .sparkle-container {
             position: fixed;
             top: 0;
@@ -86,6 +95,16 @@
             flex-direction: column;
             justify-content: space-between;
             align-items: center;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                height: auto !important;
+                min-height: 100vh;
+                justify-content: flex-start !important;
+                gap: 2rem;
+                padding: 2rem 1rem;
+            }
         }
 
         .link-boxes-top {
